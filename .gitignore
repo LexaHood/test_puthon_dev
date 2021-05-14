@@ -1,0 +1,23 @@
+# Ignore Pycache
+__pycache__
+
+# local env files
+.env
+.env.local
+.env.*.local
+
+# Log files
+*.log*
+
+# Editor directories and files
+*.idea
+*.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Ignore all tests files
+*test*
+requirements*
