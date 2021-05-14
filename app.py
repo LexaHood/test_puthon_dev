@@ -6,24 +6,24 @@ app = Flask(__name__)
 
 client = app.test_client()
 
-#SqlAlchemy Database Configuration With Mysql
+#Подключение к базе данных postgres
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:1111@127.1:5432/test_dealer'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-#Creating model table for our CRUD database
+# Модель таблицы
 class Data(db.Model):
     __tablename__ = 'simple_cars_list'
 
     id = db.Column(db.Integer, primary_key = True)
     producer = db.Column(db.String(50))
     model = db.Column(db.String(50))
-    date = db.Column(db.Integer)
-    power_hp = db.Column(db.Integer)
-    mileage_km = db.Column(db.Integer)
-    price_rub = db.Column(db.Integer)
+    date = db.Column(db.Integer())
+    power_hp = db.Column(db.Integer())
+    mileage_km = db.Column(db.Integer())
+    price_rub = db.Column(db.Integer())
 
     def __init__(self, producer, model, date, power_hp, mileage_km, price_rub):
         self.producer = producer
@@ -54,7 +54,7 @@ def get_cars():
     return jsonify(results)
 
 @app.route('/dealer', methods=['POST'])
-def update_cars():
+def insert_car():
     if request.is_json:
         data = request.get_json()
         new_car = Data(
@@ -68,9 +68,9 @@ def update_cars():
 
         db.session.add(new_car)
         db.session.commit()
-        return {'message": f"car {new_car.producer, new_car.model} has been created successfully.'}
+        return {'message': f'car {new_car.producer, new_car.model} has been created successfully.'}
     else:
-        return {'error": "The request payload is not in JSON format'}
+        return {'error': 'The request payload is not in JSON format'}
 
 @app.route('/dealer/<car_id>', methods=['GET', 'PUT', 'DELETE'])
 def handle_car(car_id):
